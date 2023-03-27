@@ -1,11 +1,8 @@
 (ns task-3.impl-1)
 
-
-(defn fn1 [x] x)
+(defn fn1 [x] (do (Thread/sleep 1) x))
 (defn fn1-int [x] (/ (* x x) 2))
 
-
-; (f(0) + 2*f(h) + 2*f(2h) + ... + 2*f(n*h)) + f(h * (n+1))) / 2 * h
 (defn trapeze [f step ind]
   (let [f_a (f (* step ind))
         f_b (f (* step (inc ind)))]
@@ -13,35 +10,39 @@
 
 (def trapeze-mem (memoize trapeze))
 
-(def int-sum
-  (memoize
-    (fn [int-base f step ind]
-      (reduce
-        #(+ %1 (int-base f step %2))
-        0
-        (range 0 ind)))))
+(defn int-sum [int-base f step]
+  (fn [ind]
+    (reduce
+      #(+ %1 (int-base f step %2))
+      0
+      (range 0 ind))))
 
-(defn integrate [int-base f step]
+(defn int-sum-mem [int-base f step]
+   (memoize (int-sum int-base f step)))
+
+(defn integrate [sum-base f step]
   (fn [t]
     (let [ind (int (/ t step))
-          trapeze-sum (int-sum int-base f step ind)
+          trapeze-sum (sum-base ind)
           f-ind (f (* ind step))
           local-step (- t (* ind step))]
       (-> (f t) (+ f-ind) (/ 2) (* local-step) (+ trapeze-sum)))))
 
-(def t 10.05)
-(def STEP 0.0001)
 
-(def int-f (integrate trapeze fn1 STEP))
-(def int-f-mem (integrate trapeze-mem fn1 STEP))
-(def int-f-mem-2 (integrate trapeze-mem (memoize fn1) STEP))
+(def STEP 0.01)
 
+(def int-f       (integrate (int-sum     trapeze     fn1 STEP) fn1 STEP))
+(def int-f-mem-1 (integrate (int-sum     trapeze-mem fn1 STEP) fn1 STEP))
+(def int-f-mem-2 (integrate (int-sum-mem trapeze     fn1 STEP) fn1 STEP))
+(def int-f-mem-3 (integrate (int-sum-mem trapeze-mem fn1 STEP) fn1 STEP))
 
-(def X (range 0 30 0.33))
+(def X (range 0 10 1.33))
 
 (defn test-foo [f]
   (println (take 3 (time (vec (map f X))))))
 
 (test-foo int-f)
-(test-foo int-f-mem)
+(test-foo int-f-mem-1)
 (test-foo int-f-mem-2)
+(test-foo int-f-mem-3)
+
