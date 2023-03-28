@@ -1,4 +1,4 @@
-(ns task-2.impl-2)
+(ns task-2.impl_2)
 
 (defn has-dividers [num coll]
   (some #(= (mod num %) 0) coll))
