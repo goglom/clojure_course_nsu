@@ -13,7 +13,10 @@
 
 
 ; Must fill first prime numbers no less than sqrt(STEP)
-; For STEP = 100, its equals 10.. (2, 3, 5, 7, 11)
+; For STEP = 100, its equals 10.. (2, 3, 5, 7, 11)[12, 13, 14, 15 ...20]&[21]
+;                                                  b              b + D
+; sqrt(b + D) < b
+; b + D < b^2 ==> D = b^2 - b - 1
 ; For STEP = 1000: ~31.622.. (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)
 (let [START-SEQ '(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37)
       MAX (last START-SEQ)
@@ -26,5 +29,5 @@
                    (primes upper-b))))))
 
 
-(println (take 100 (primes)))
-(println (time (nth (primes) 10000)))
+;(println (take 100 (primes)))
+(println (time (nth (primes) 1000000)))

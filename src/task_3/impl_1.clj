@@ -29,20 +29,25 @@
       (-> (f t) (+ f-ind) (/ 2) (* local-step) (+ trapeze-sum)))))
 
 
+;(defn fn1-mem (memoize fn1))
+
 (def STEP 0.01)
 
 (def int-f       (integrate (int-sum     trapeze     fn1 STEP) fn1 STEP))
 (def int-f-mem-1 (integrate (int-sum     trapeze-mem fn1 STEP) fn1 STEP))
 (def int-f-mem-2 (integrate (int-sum-mem trapeze     fn1 STEP) fn1 STEP))
 (def int-f-mem-3 (integrate (int-sum-mem trapeze-mem fn1 STEP) fn1 STEP))
+;(def int-f-mem-4 (integrate (int-sum-mem trapeze-mem fn1-mem STEP) fn1-mem STEP))
 
-(def X (range 0 10 1.33))
+(def X (range 0 10 1.31))
 
 (defn test-foo [f]
-  (println (take 3 (time (vec (map f X))))))
+  (println (take 3 (time (doall (map f X))))))
 
-(test-foo int-f)
-(test-foo int-f-mem-1)
-(test-foo int-f-mem-2)
+;(test-foo int-f)
+;(test-foo int-f-mem-1)
+;(test-foo int-f-mem-2)
 (test-foo int-f-mem-3)
+;(test-foo int-f-mem-4)
+
 

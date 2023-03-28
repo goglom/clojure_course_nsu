@@ -23,4 +23,6 @@
     (is (= 7919 (prime-nth 1000)))
     ))
 
+(println (time (prime-nth 100000)))
+
 (run-test task_2_1-test)

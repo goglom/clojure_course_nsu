@@ -8,7 +8,6 @@
     coll
     (range (* i i) n i)))
 
-
 (defn get-primes-bit-array [n]
   (reduce
     (fn [l r] (mark-nonprime l r n))
@@ -16,7 +15,6 @@
     (take-while
       (fn [i] (<= (* i i) n))
       (iterate inc 2))))
-
 
 (defn prime-nth-upper-bound
   "Return upper bound of n-th prime number"
