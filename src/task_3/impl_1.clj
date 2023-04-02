@@ -50,4 +50,6 @@
 (test-foo int-f-mem-3)
 ;(test-foo int-f-mem-4)
 
+(defn memtegrate [fn step]
+  (integrate (int-sum-mem trapeze-mem fn step) fn step))
 
