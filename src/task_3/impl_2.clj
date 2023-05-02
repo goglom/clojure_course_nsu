@@ -4,9 +4,10 @@
   (iterate
     (fn [[prev-sum ind f_a]]
       (let [next-ind (inc ind)
+            f_c (f (* step ind))
             f_b (f (* step next-ind))]
-        (list
-          (+ prev-sum (-> (+ f_a f_b) (/ 2) (* step)))
+        (list                                               ; f_a ~ f_C
+          (+ prev-sum (-> (+ f_c f_b) (/ 2) (* step)))
           next-ind
           f_b)))
     (list 0 0 (f 0))))

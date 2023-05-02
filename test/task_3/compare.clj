@@ -13,7 +13,10 @@
 
 
 (defn test-func [f & r]
-  (let [X (shuffle test-range)]
+  (let [
+        ;X (shuffle test-range)
+        X test-range
+        ]
     (when r (apply println r))
     (println (take 3 (time (doall (map f X)))))
     (println)))
@@ -26,7 +29,5 @@
 
 (test-func mem-int)
 (test-func mem-int)
-(test-func mem-int)
-(test-func seq-int)
 (test-func seq-int)
 (test-func seq-int)
